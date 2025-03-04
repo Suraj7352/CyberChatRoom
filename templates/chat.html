@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Chat App</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+            height: 80%;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            background: #121212;
+        }
+
+        /* Left panel for active users */
+        .users {
+            width: 30%;
+            background-color: #0c0c0c;
+            padding: 20px;
+            border-right: 2px solid #00ff00;
+            overflow-y: auto;
+        }
+
+        .users h3 {
+            font-size: 2rem;
+            margin-top: 0;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 1);
+        }
+
+        .users ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .users li {
+            margin: 15px 0;
+            padding: 10px;
+            background: #333;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .users li:hover {
+            background-color: #00ff00;
+            transform: scale(1.1);
+        }
+
+        .users a {
+            text-decoration: none;
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        /* Right panel for chat */
+        .chat {
+            width: 70%;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #1e1e1e;
+        }
+
+        .chat h1 {
+            margin-top: 0;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        }
+
+        /* Chat window */
+        #messages {
+            border: 1px solid #00ff00;
+            padding: 20px;
+            height: 400px;
+            overflow-y: scroll;
+            margin-bottom: 20px;
+            background: #121212;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        #message {
+            width: 100%;
+            padding: 15px;
+            background: #333;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-family: 'Courier New', Courier, monospace;
+            outline: none;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        #message:focus {
+            border-color: #ff00ff; /* Neon pink when focused */
+            box-shadow: 0 0 5px #ff00ff;
+        }
+
+        #sendMessage {
+            padding: 12px 30px;
+            background-color: #00ff00;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        #sendMessage:hover {
+            background-color: #ff00ff;
+            color: #121212;
+            transform: scale(1.1);
+        }
+
+        /* Private message recipient (hidden) */
+        #privateRecipient {
+            display: none;
+        }
+
+        /* Flash messages */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            font-size: 1rem;
+            margin: 10px 0;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #00ff00;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #00cc00;
+        }
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: #000;
+            color: #00ff00;
+            padding: 12px 20px;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+        }
+
+        .logout-btn:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00;
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+<body>
+     <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    <div class="container">
+        <!-- Left panel for active users -->
+        <div class="users">
+            <h3>Active Users</h3>
+            <ul>
+                {% for user in users %}
+                    {% if user.username != current_user.username %}
+                        <li><a href="#" class="private-message" data-username="{{ user.username }}">{{ user.username }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Right panel for chat -->
+        <div class="chat">
+            <h1>Welcome, {{ current_user.username }}!</h1>
+
+            <!-- Chat window -->
+            <div id="messages">
+                {% for message in messages %}
+                    <p><strong>{{ message.sender }}</strong>: {{ message.content }}</p>
+                {% endfor %}
+            </div>
+
+            <!-- Message input -->
+            <textarea id="message" placeholder="Type a message..."></textarea><br>
+            <button id="sendMessage">Send Message</button>
+
+            <!-- Private message recipient (hidden) -->
+            <input type="hidden" id="privateRecipient" value="">
+        </div>
+    </div>
+
+    <script>
+        const socket = io.connect();
+
+        // Send message
+        $('#sendMessage').click(function() {
+            const messageContent = $('#message').val();
+            const recipient = $('#privateRecipient').val();  // Get recipient username for private message
+
+            // Emit message to server
+            socket.emit('chat message', {
+                username: "{{ current_user.username }}",
+                message: messageContent,
+                receiver: recipient || null  // If no recipient, it's a public message
+            });
+
+            // Clear the message input
+            $('#message').val('');
+        });
+
+        // Private message recipient selection
+        $('.private-message').click(function() {
+            const recipient = $(this).data('username');
+            $('#privateRecipient').val(recipient);  // Set recipient for private message
+            alert('Now messaging ' + recipient);
+        });
+
+        // Receive messages from the server
+        socket.on('chat message', function(data) {
+            const message = data.message;
+            const username = data.username;
+            const receiver = data.receiver;
+
+            let messageContent = `${username}: ${message}`;
+            
+            // If it's a private message, show it only to the sender and receiver
+            if (receiver && receiver === "{{ current_user.username }}") {
+                messageContent = `<strong>Private from ${username}</strong>: ${message}`;
+            }
+
+            // Display message in chat window
+            $('#messages').append('<p>' + messageContent + '</p>');
+            $('#messages').scrollTop($('#messages')[0].scrollHeight);  // Auto-scroll to bottom
+        });
+    </script>
+</body>
+</html>
