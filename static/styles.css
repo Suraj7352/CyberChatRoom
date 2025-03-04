@@ -1,0 +1,139 @@
+/* Apply the background image */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+    color: #00ff00;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.RNK9zcPdbOPbGFJJihT2owHaEc%26pid%3DApi&f=1&ipt=4c63bcfa4162f8c03e04a8bf0233f5d98feab11d97fdac9044f7ff0e5b9c98ef&ipo=images');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #00ff00;
+}
+
+/* Dark overlay to enhance text visibility */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background */
+}
+
+.container {
+    z-index: 10;
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+h2 {
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-weight: bold;
+    text-shadow: 0 0 15px rgba(0, 255, 0, 0.8), 0 0 30px rgba(0, 255, 0, 0.8), 0 0 45px rgba(0, 255, 0, 1);
+    margin-bottom: 20px;
+    animation: pulse 2s infinite alternate;
+}
+
+/* Pulse animation for title */
+@keyframes pulse {
+    0% {
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.6), 0 0 20px rgba(0, 255, 0, 0.8);
+    }
+    100% {
+        text-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 255, 0, 1);
+    }
+}
+
+/* Form Styling */
+form {
+    background-color: rgba(0, 0, 0, 0.85);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    width: 350px;
+    margin: 0 auto;
+    position: relative;
+}
+
+label {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+input {
+    background-color: #121212;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: #ff00ff; /* Neon pink */
+}
+
+button {
+    background-color: #00ff00;
+    color: black;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+button:hover {
+    background-color: #ff00ff;
+    color: #121212;
+    transform: scale(1.1);
+}
+
+a {
+    color: #00ff00;
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-block;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+a:hover {
+    color: #ff00ff;
+    transform: scale(1.1);
+}
+
+/* Flash messages */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}

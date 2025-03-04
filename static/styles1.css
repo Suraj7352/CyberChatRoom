@@ -1,0 +1,173 @@
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+            height: 80%;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            background: #121212;
+        }
+
+        /* Left panel for active users */
+        .users {
+            width: 30%;
+            background-color: #0c0c0c;
+            padding: 20px;
+            border-right: 2px solid #00ff00;
+            overflow-y: auto;
+        }
+
+        .users h3 {
+            font-size: 2rem;
+            margin-top: 0;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 1);
+        }
+
+        .users ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .users li {
+            margin: 15px 0;
+            padding: 10px;
+            background: #333;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .users li:hover {
+            background-color: #00ff00;
+            transform: scale(1.1);
+        }
+
+        .users a {
+            text-decoration: none;
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        /* Right panel for chat */
+        .chat {
+            width: 70%;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #1e1e1e;
+        }
+
+        .chat h1 {
+            margin-top: 0;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        }
+
+        /* Chat window */
+        #messages {
+            border: 1px solid #00ff00;
+            padding: 20px;
+            height: 400px;
+            overflow-y: scroll;
+            margin-bottom: 20px;
+            background: #121212;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        #message {
+            width: 100%;
+            padding: 15px;
+            background: #333;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-family: 'Courier New', Courier, monospace;
+            outline: none;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        #message:focus {
+            border-color: #ff00ff; /* Neon pink when focused */
+            box-shadow: 0 0 5px #ff00ff;
+        }
+
+        #sendMessage {
+            padding: 12px 30px;
+            background-color: #00ff00;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        #sendMessage:hover {
+            background-color: #ff00ff;
+            color: #121212;
+            transform: scale(1.1);
+        }
+
+        /* Private message recipient (hidden) */
+        #privateRecipient {
+            display: none;
+        }
+
+        /* Flash messages */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            font-size: 1rem;
+            margin: 10px 0;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #00ff00;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #00cc00;
+        }
+    </style>
